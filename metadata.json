@@ -1,0 +1,8 @@
+{
+  "name": "Remix CrossPart AI - Tra Cứu Linh Kiện & So Sánh Giá DigiKey, Mouser, LCSC",
+  "description": "Công cụ tra cứu linh kiện điện tử tương đương (cross-reference) thay thế part EOL, so sánh giá đa nguồn DigiKey, Mouser, LCSC, upload BOM file Excel và xuất file Excel kết quả hoàn chỉnh.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
