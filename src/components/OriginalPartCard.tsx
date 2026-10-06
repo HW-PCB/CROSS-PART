@@ -60,7 +60,7 @@ export const OriginalPartCard: React.FC<OriginalPartCardProps> = ({ part, langua
               <button
                 onClick={handleCopy}
                 className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
-                title="Sao chép mã part / Copy MPN"
+                title={language === 'vi' ? 'Sao chép mã linh kiện' : 'Copy MPN'}
               >
                 {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
               </button>
@@ -77,7 +77,7 @@ export const OriginalPartCard: React.FC<OriginalPartCardProps> = ({ part, langua
               {part.pinCount ? (
                 <>
                   <span className="text-slate-300 dark:text-slate-700">|</span>
-                  <span className="text-slate-500">{part.pinCount} Pins</span>
+                  <span className="text-slate-500">{part.pinCount} {language === 'vi' ? 'Chân' : 'Pins'}</span>
                 </>
               ) : null}
               <span className="text-slate-300 dark:text-slate-700">|</span>
@@ -98,7 +98,9 @@ export const OriginalPartCard: React.FC<OriginalPartCardProps> = ({ part, langua
                   {language === 'vi' ? 'Tiêu chí ưu tiên chọn Điện trở thay thế:' : 'Resistor priority matching rules:'}
                 </span>
                 <span className="font-mono text-[11px] text-amber-800 dark:text-amber-300">
-                  1. Resistance (Đúng giá trị) ➔ 2. Package (Đúng cỡ) ➔ 3. Tolerance (≤ Gốc) ➔ 4. Temp Range
+                  {language === 'vi'
+                    ? '1. Trị số R (Bắt buộc đúng) ➔ 2. Kích thước Package (Đúng cỡ) ➔ 3. Sai số Tolerance (≤ Gốc) ➔ 4. Dải nhiệt độ'
+                    : '1. Resistance (Exact) ➔ 2. Package (Exact) ➔ 3. Tolerance (≤ Original) ➔ 4. Temp Range'}
                 </span>
               </div>
             )}
@@ -110,7 +112,9 @@ export const OriginalPartCard: React.FC<OriginalPartCardProps> = ({ part, langua
                   {language === 'vi' ? 'Tiêu chí ưu tiên chọn Tụ điện thay thế:' : 'Capacitor priority matching rules:'}
                 </span>
                 <span className="font-mono text-[11px] text-cyan-800 dark:text-cyan-300">
-                  1. Capacitance (Đúng trị số) ➔ 2. Package (Đúng cỡ) ➔ 3. Voltage (≥ Gốc) ➔ 4. Tolerance (≤ Gốc) ➔ 5. Temp Range
+                  {language === 'vi'
+                    ? '1. Điện dung C (Bắt buộc đúng) ➔ 2. Kích thước Package (Đúng cỡ) ➔ 3. Điện áp Voltage (≥ Gốc) ➔ 4. Sai số (≤ Gốc) ➔ 5. Dải nhiệt độ'
+                    : '1. Capacitance (Exact) ➔ 2. Package (Exact) ➔ 3. Rated Voltage (≥ Original) ➔ 4. Tolerance (≤ Original) ➔ 5. Temp Range'}
                 </span>
               </div>
             )}
@@ -170,7 +174,7 @@ export const OriginalPartCard: React.FC<OriginalPartCardProps> = ({ part, langua
           <div className="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800">
             <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
               <Cpu className="w-3.5 h-3.5 text-blue-500" />
-              <span>{language === 'vi' ? 'Thông số kỹ thuật then chốt (Key Specs)' : 'Key Electrical Specs'}</span>
+              <span>{language === 'vi' ? 'Thông số kỹ thuật then chốt' : 'Key Electrical Specs'}</span>
             </h4>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
               {Object.entries(part.keySpecs).map(([key, value]) => (
@@ -196,7 +200,7 @@ export const OriginalPartCard: React.FC<OriginalPartCardProps> = ({ part, langua
             <div className="flex items-center justify-between mb-2">
               <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
                 <Radio className="w-3.5 h-3.5 text-blue-500" />
-                <span>{language === 'vi' ? 'Sơ đồ chân cắm chuẩn (Pinout)' : 'Standard Pinout'}</span>
+                <span>{language === 'vi' ? 'Sơ đồ chân cắm chuẩn' : 'Standard Pinout'}</span>
               </h4>
               {part.pinoutSummary.length > 6 && (
                 <button

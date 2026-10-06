@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import {
   Zap,
-  CheckCircle2,
-  AlertTriangle,
-  ArrowRight,
   ShieldCheck,
-  Sparkles,
-  Info,
   X,
   HelpCircle,
 } from 'lucide-react';
@@ -39,13 +34,13 @@ export const PassiveComponentRulesGuide: React.FC<PassiveComponentRulesGuideProp
                     : 'Priority Rules for Equivalent Resistors & Capacitors'}
                 </h3>
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-700 dark:bg-indigo-900/60 dark:text-indigo-300">
-                  Chuẩn Kỹ Thuật
+                  {language === 'vi' ? 'Chuẩn Kỹ Thuật' : 'Engineering Standard'}
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-0.5">
                 {language === 'vi'
-                  ? 'R: 1.Resistance (đúng) ➔ 2.Package (đúng) ➔ 3.Tolerance (≤) ➔ 4.Temp | C: 1.Capacitance (đúng) ➔ 2.Package (đúng) ➔ 3.Voltage (≥) ➔ 4.Tolerance (≤) ➔ 5.Temp'
-                  : 'R: 1.Resistance (exact) ➔ 2.Package (exact) ➔ 3.Tolerance (≤) ➔ 4.Temp | C: 1.Capacitance (exact) ➔ 2.Package (exact) ➔ 3.Voltage (≥) ➔ 4.Tolerance (≤) ➔ 5.Temp'}
+                  ? 'R: 1. Trị số R (đúng) ➔ 2. Kích thước (đúng) ➔ 3. Sai số (≤ Gốc) ➔ 4. Nhiệt độ | C: 1. Điện dung (đúng) ➔ 2. Kích thước (đúng) ➔ 3. Điện áp (≥ Gốc) ➔ 4. Sai số (≤ Gốc) ➔ 5. Nhiệt độ'
+                  : 'R: 1. Resistance (exact) ➔ 2. Package (exact) ➔ 3. Tolerance (≤ Orig) ➔ 4. Temp | C: 1. Capacitance (exact) ➔ 2. Package (exact) ➔ 3. Voltage (≥ Orig) ➔ 4. Tolerance (≤ Orig) ➔ 5. Temp'}
               </p>
             </div>
           </div>
@@ -57,17 +52,17 @@ export const PassiveComponentRulesGuide: React.FC<PassiveComponentRulesGuideProp
                   type="button"
                   onClick={() => onSelectSample('RC0603FR-0710KL')}
                   className="px-3 py-1.5 rounded-lg text-xs font-medium bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 hover:text-indigo-600 transition-colors shadow-2xs font-mono"
-                  title="Điện trở 10k 0603 1%"
+                  title={language === 'vi' ? 'Điện trở 10k 0603 1%' : '10k 0603 1% Resistor'}
                 >
-                  ⚡ Mẫu R (10k 0603)
+                  {language === 'vi' ? '⚡ Mẫu R (10k 0603)' : '⚡ Sample R (10k 0603)'}
                 </button>
                 <button
                   type="button"
                   onClick={() => onSelectSample('CC0603KRX7R9BB104')}
                   className="px-3 py-1.5 rounded-lg text-xs font-medium bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 hover:text-indigo-600 transition-colors shadow-2xs font-mono"
-                  title="Tụ gốm 100nF 50V 0603"
+                  title={language === 'vi' ? 'Tụ gốm 100nF 50V 0603' : '100nF 50V 0603 MLCC'}
                 >
-                  ⚡ Mẫu C (100nF 50V)
+                  {language === 'vi' ? '⚡ Mẫu C (100nF 50V)' : '⚡ Sample C (100nF 50V)'}
                 </button>
               </>
             )}
@@ -101,7 +96,7 @@ export const PassiveComponentRulesGuide: React.FC<PassiveComponentRulesGuideProp
                   </h3>
                   <p className="text-xs text-indigo-200 mt-0.5">
                     {language === 'vi'
-                      ? 'Bộ quy tắc kỹ thuật phần cứng cho Cross-Reference linh kiện thụ động'
+                      ? 'Bộ quy tắc kỹ thuật phần cứng cho tra cứu linh kiện thụ động'
                       : 'Hardware engineering rules for cross-referencing passive components'}
                   </p>
                 </div>
@@ -126,7 +121,7 @@ export const PassiveComponentRulesGuide: React.FC<PassiveComponentRulesGuideProp
                     {language === 'vi' ? 'Điện Trở (Resistor) - Sắp Xếp Theo Thứ Tự Ưu Tiên' : 'Resistors - Ordered Priority Rules'}
                   </h4>
                   <span className="text-xs font-semibold px-2 py-0.5 rounded bg-amber-200/60 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200">
-                    4 Tiêu Chí Bắt Buộc
+                    {language === 'vi' ? '4 Tiêu Chí Bắt Buộc' : '4 Mandatory Rules'}
                   </span>
                 </div>
 
@@ -134,46 +129,72 @@ export const PassiveComponentRulesGuide: React.FC<PassiveComponentRulesGuideProp
                   <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-amber-200/80 dark:border-amber-900/40">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-xs font-bold">1</span>
-                      <span className="font-bold text-slate-900 dark:text-white">Resistance (Trị số điện trở)</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {language === 'vi' ? 'Resistance (Trị số điện trở)' : 'Resistance Value'}
+                      </span>
                     </div>
                     <p className="text-xs text-slate-600 dark:text-slate-300 pl-7 font-medium">
-                      🎯 <strong className="text-emerald-700 dark:text-emerald-400">Tìm ĐÚNG giá trị</strong> (Exact match). Ví dụ: 10 kΩ bắt buộc phải thay bằng đúng 10 kΩ để đảm bảo phân áp và định dòng.
+                      🎯 <strong className="text-emerald-700 dark:text-emerald-400">
+                        {language === 'vi' ? 'Tìm ĐÚNG giá trị (Exact match)' : 'Exact match required'}
+                      </strong>. {language === 'vi'
+                        ? 'Ví dụ: 10 kΩ bắt buộc phải thay bằng đúng 10 kΩ để đảm bảo phân áp và định dòng.'
+                        : 'E.g., 10 kΩ must be replaced with exactly 10 kΩ to maintain voltage divider and bias.'}
                     </p>
                   </div>
 
                   <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-amber-200/80 dark:border-amber-900/40">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-xs font-bold">2</span>
-                      <span className="font-bold text-slate-900 dark:text-white">Package / Case (Đóng gói)</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {language === 'vi' ? 'Package / Case (Kích thước)' : 'Package / Footprint'}
+                      </span>
                     </div>
                     <p className="text-xs text-slate-600 dark:text-slate-300 pl-7 font-medium">
-                      📐 <strong className="text-emerald-700 dark:text-emerald-400">Tìm ĐÚNG kích thước</strong> (Exact Footprint). Ví dụ: 0603, 0805, 0402, 1206... phải khớp hoàn toàn pad hàn PCB.
+                      📐 <strong className="text-emerald-700 dark:text-emerald-400">
+                        {language === 'vi' ? 'Tìm ĐÚNG kích thước (Exact Footprint)' : 'Exact footprint required'}
+                      </strong>. {language === 'vi'
+                        ? 'Ví dụ: 0603, 0805, 0402, 1206... phải khớp hoàn toàn pad hàn PCB.'
+                        : 'E.g., 0603, 0805, 0402, 1206... must match PCB pads exactly.'}
                     </p>
                   </div>
 
                   <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-amber-200/80 dark:border-amber-900/40">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-xs font-bold">3</span>
-                      <span className="font-bold text-slate-900 dark:text-white">Tolerance (Sai số)</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {language === 'vi' ? 'Tolerance (Sai số)' : 'Tolerance'}
+                      </span>
                     </div>
                     <p className="text-xs text-slate-600 dark:text-slate-300 pl-7 font-medium">
-                      ⚖️ <strong className="text-emerald-700 dark:text-emerald-400">Bằng hoặc THẤP HƠN</strong> (≤ Gốc). Ví dụ: Bản gốc 5% có thể thay bằng 5%, 1%, 0.5% hoặc 0.1% (càng nhỏ càng chính xác!).
+                      ⚖️ <strong className="text-emerald-700 dark:text-emerald-400">
+                        {language === 'vi' ? 'Bằng hoặc THẤP HƠN (≤ Gốc)' : 'Equal or LOWER (≤ Original)'}
+                      </strong>. {language === 'vi'
+                        ? 'Ví dụ: Bản gốc 5% có thể thay bằng 5%, 1%, 0.5% hoặc 0.1%.'
+                        : 'E.g., 5% original can be replaced with 5%, 1%, 0.5%, or 0.1%.'}
                     </p>
                   </div>
 
                   <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-amber-200/80 dark:border-amber-900/40">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-xs font-bold">4</span>
-                      <span className="font-bold text-slate-900 dark:text-white">Operating Temperature</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {language === 'vi' ? 'Operating Temperature (Nhiệt độ)' : 'Operating Temperature'}
+                      </span>
                     </div>
                     <p className="text-xs text-slate-600 dark:text-slate-300 pl-7 font-medium">
-                      🌡️ <strong className="text-emerald-700 dark:text-emerald-400">Tương đương hoặc rộng hơn</strong> (-55°C ~ +125°C hoặc +155°C cho chuẩn ô tô/công nghiệp AEC-Q200).
+                      🌡️ <strong className="text-emerald-700 dark:text-emerald-400">
+                        {language === 'vi' ? 'Tương đương hoặc rộng hơn' : 'Equivalent or wider'}
+                      </strong> {language === 'vi'
+                        ? '(-55°C ~ +125°C hoặc +155°C cho chuẩn ô tô AEC-Q200).'
+                        : '(-55°C ~ +125°C or +155°C for automotive AEC-Q200).'}
                     </p>
                   </div>
                 </div>
 
                 <div className="text-xs bg-amber-100/60 dark:bg-amber-900/40 p-2.5 rounded-lg text-amber-900 dark:text-amber-200">
-                  💡 <strong>Lưu ý công suất (Power Rating):</strong> Công suất định mức của điện trở thay thế phải <strong>bằng hoặc lớn hơn</strong> bản gốc (ví dụ: gốc 1/10W có thể thay bằng 1/10W hoặc 1/8W).
+                  {language === 'vi'
+                    ? '💡 Lưu ý công suất: Công suất định mức của điện trở thay thế phải bằng hoặc lớn hơn bản gốc (ví dụ: gốc 1/10W có thể thay bằng 1/10W hoặc 1/8W).'
+                    : '💡 Power rating note: The power rating of replacement resistor must be equal to or higher than original (e.g., 1/10W can be replaced with 1/10W or 1/8W).'}
                 </div>
               </div>
 
@@ -187,7 +208,7 @@ export const PassiveComponentRulesGuide: React.FC<PassiveComponentRulesGuideProp
                     {language === 'vi' ? 'Tụ Điện (Capacitor) - Sắp Xếp Theo Thứ Tự Ưu Tiên' : 'Capacitors - Ordered Priority Rules'}
                   </h4>
                   <span className="text-xs font-semibold px-2 py-0.5 rounded bg-cyan-200/60 dark:bg-cyan-900/60 text-cyan-900 dark:text-cyan-200">
-                    5 Tiêu Chí Bắt Buộc
+                    {language === 'vi' ? '5 Tiêu Chí Bắt Buộc' : '5 Mandatory Rules'}
                   </span>
                 </div>
 
@@ -195,59 +216,91 @@ export const PassiveComponentRulesGuide: React.FC<PassiveComponentRulesGuideProp
                   <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-cyan-200/80 dark:border-cyan-900/40">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-xs font-bold">1</span>
-                      <span className="font-bold text-slate-900 dark:text-white">Capacitance (Điện dung)</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {language === 'vi' ? 'Capacitance (Điện dung)' : 'Capacitance Value'}
+                      </span>
                     </div>
                     <p className="text-xs text-slate-600 dark:text-slate-300 pl-7 font-medium">
-                      🎯 <strong className="text-emerald-700 dark:text-emerald-400">Tìm ĐÚNG giá trị</strong> (Exact match). Ví dụ: 100nF (0.1µF) phải thay đúng 100nF để đảm bảo tần số cắt lọc nhiễu.
+                      🎯 <strong className="text-emerald-700 dark:text-emerald-400">
+                        {language === 'vi' ? 'Tìm ĐÚNG giá trị (Exact match)' : 'Exact match required'}
+                      </strong>. {language === 'vi'
+                        ? 'Ví dụ: 100nF (0.1µF) phải thay đúng 100nF để đảm bảo tần số cắt lọc nhiễu.'
+                        : 'E.g., 100nF (0.1µF) must be replaced with exactly 100nF to preserve filter frequency.'}
                     </p>
                   </div>
 
                   <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-cyan-200/80 dark:border-cyan-900/40">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-xs font-bold">2</span>
-                      <span className="font-bold text-slate-900 dark:text-white">Package / Case (Đóng gói)</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {language === 'vi' ? 'Package / Case (Kích thước)' : 'Package / Footprint'}
+                      </span>
                     </div>
                     <p className="text-xs text-slate-600 dark:text-slate-300 pl-7 font-medium">
-                      📐 <strong className="text-emerald-700 dark:text-emerald-400">Tìm ĐÚNG kích thước</strong> (Exact Footprint). Ví dụ: 0603, 0805, 1206 hoặc tụ hóa Radial Can 10x20mm bước chân 5mm.
+                      📐 <strong className="text-emerald-700 dark:text-emerald-400">
+                        {language === 'vi' ? 'Tìm ĐÚNG kích thước (Exact Footprint)' : 'Exact footprint required'}
+                      </strong>. {language === 'vi'
+                        ? 'Ví dụ: 0603, 0805, 1206 hoặc tụ hóa Radial Can 10x20mm.'
+                        : 'E.g., 0603, 0805, 1206 or Radial Can 10x20mm.'}
                     </p>
                   </div>
 
                   <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-cyan-200/80 dark:border-cyan-900/40 sm:col-span-2 bg-gradient-to-r from-emerald-50/50 to-white dark:from-emerald-950/20 dark:to-slate-900">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold">3</span>
-                      <span className="font-bold text-slate-900 dark:text-white">Voltage – Rated (Điện áp định mức VDC)</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {language === 'vi' ? 'Voltage – Rated (Điện áp định mức)' : 'Rated Voltage (VDC)'}
+                      </span>
                       <span className="ml-auto text-[11px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/60 px-2 py-0.5 rounded">
-                        QUY TẮC SỐNG CÒN
+                        {language === 'vi' ? 'QUY TẮC BẮT BUỘC' : 'CRITICAL RULE'}
                       </span>
                     </div>
                     <p className="text-xs text-slate-600 dark:text-slate-300 pl-7 font-medium">
-                      ⚡ <strong className="text-emerald-700 dark:text-emerald-400">Bằng hoặc CAO HƠN giá trị gốc</strong> (≥ Original Voltage). Ví dụ: Bản gốc 16V CÓ THỂ thay bằng 16V, 25V, 35V, 50V... Tuyệt đối KHÔNG ĐƯỢC dùng điện áp thấp hơn (như 10V, 6.3V) vì tụ sẽ bị đánh thủng điện môi và phát nổ!
+                      ⚡ <strong className="text-emerald-700 dark:text-emerald-400">
+                        {language === 'vi' ? 'Bằng hoặc CAO HƠN giá trị gốc (≥ Gốc)' : 'Equal or HIGHER than original (≥ Original)'}
+                      </strong>. {language === 'vi'
+                        ? 'Ví dụ: Bản gốc 16V CÓ THỂ thay bằng 16V, 25V, 35V, 50V... Tuyệt đối KHÔNG DÙNG điện áp thấp hơn (như 10V, 6.3V) vì tụ sẽ bị đánh thủng điện môi!'
+                        : 'E.g., 16V original CAN be replaced with 16V, 25V, 35V, 50V... Never use lower voltage (e.g. 10V, 6.3V) as dielectric breakdown will occur!'}
                     </p>
                   </div>
 
                   <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-cyan-200/80 dark:border-cyan-900/40">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-xs font-bold">4</span>
-                      <span className="font-bold text-slate-900 dark:text-white">Tolerance (Sai số)</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {language === 'vi' ? 'Tolerance (Sai số)' : 'Tolerance'}
+                      </span>
                     </div>
                     <p className="text-xs text-slate-600 dark:text-slate-300 pl-7 font-medium">
-                      ⚖️ <strong className="text-emerald-700 dark:text-emerald-400">Bằng hoặc THẤP HƠN</strong> (≤ Gốc). Ví dụ: Gốc ±20% có thể thay bằng ±20%, ±10% hoặc ±5%.
+                      ⚖️ <strong className="text-emerald-700 dark:text-emerald-400">
+                        {language === 'vi' ? 'Bằng hoặc THẤP HƠN (≤ Gốc)' : 'Equal or LOWER (≤ Original)'}
+                      </strong>. {language === 'vi'
+                        ? 'Ví dụ: Gốc ±20% có thể thay bằng ±20%, ±10% hoặc ±5%.'
+                        : 'E.g., ±20% original can be replaced with ±20%, ±10%, or ±5%.'}
                     </p>
                   </div>
 
                   <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-cyan-200/80 dark:border-cyan-900/40">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-xs font-bold">5</span>
-                      <span className="font-bold text-slate-900 dark:text-white">Operating Temperature</span>
+                      <span className="font-bold text-slate-900 dark:text-white">
+                        {language === 'vi' ? 'Operating Temperature (Nhiệt độ)' : 'Operating Temperature'}
+                      </span>
                     </div>
                     <p className="text-xs text-slate-600 dark:text-slate-300 pl-7 font-medium">
-                      🌡️ <strong className="text-emerald-700 dark:text-emerald-400">Tương đương hoặc rộng hơn</strong> (-55°C ~ +125°C cho chuẩn điện môi X7R; 105°C cho tụ hóa nhôm).
+                      🌡️ <strong className="text-emerald-700 dark:text-emerald-400">
+                        {language === 'vi' ? 'Tương đương hoặc rộng hơn' : 'Equivalent or wider'}
+                      </strong> {language === 'vi'
+                        ? '(-55°C ~ +125°C cho chuẩn điện môi X7R; 105°C cho tụ hóa).'
+                        : '(-55°C ~ +125°C for X7R dielectric; 105°C for aluminum electrolytic).'}
                     </p>
                   </div>
                 </div>
 
                 <div className="text-xs bg-cyan-100/60 dark:bg-cyan-900/40 p-2.5 rounded-lg text-cyan-900 dark:text-cyan-200">
-                  💡 <strong>Lưu ý chất điện môi (Dielectric):</strong> Tụ gốm MLCC nên ưu tiên chất điện môi <strong>X7R</strong> (hoặc C0G/NP0 cho mạch RF/dao động cao tần) thay vì Y5V có độ sụt áp DC-bias lớn.
+                  {language === 'vi'
+                    ? '💡 Lưu ý chất điện môi: Tụ gốm MLCC nên ưu tiên chất điện môi X7R (hoặc C0G/NP0 cho mạch RF/dao động cao tần) thay vì Y5V có độ sụt áp DC-bias lớn.'
+                    : '💡 Dielectric note: MLCC capacitors should prioritize X7R dielectric (or C0G/NP0 for high-frequency RF) over Y5V due to large DC-bias derating.'}
                 </div>
               </div>
             </div>
@@ -255,7 +308,9 @@ export const PassiveComponentRulesGuide: React.FC<PassiveComponentRulesGuideProp
             {/* Modal Footer */}
             <div className="p-4 sm:p-5 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
               <span className="text-xs text-slate-500">
-                CrossPart AI tự động kiểm tra và đánh giá các tiêu chí này trên từng mã part thay thế.
+                {language === 'vi'
+                  ? 'Hệ thống tự động kiểm tra và đánh giá các tiêu chí này trên từng mã linh kiện thay thế.'
+                  : 'The system automatically checks and rates these criteria on each candidate part.'}
               </span>
               <button
                 type="button"

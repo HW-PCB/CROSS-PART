@@ -157,22 +157,23 @@ export const ParametricComparisonMatrix: React.FC<ParametricComparisonMatrixProp
   // Export comparison table to genuine Excel (.xlsx) file
   const handleExportExcel = () => {
     const wb = XLSX.utils.book_new();
+    const isVi = language === 'vi';
 
     const headers = [
-      'Thông Số / Đặc Tính',
-      `${originalPart.partNumber} (Part Gốc)`,
+      isVi ? 'Thông Số / Thuộc Tính' : 'Parameter / Specification',
+      `${originalPart.partNumber} (${isVi ? 'Mã Gốc' : 'Original'})`,
       ...selectedCandidates.map((c) => `${c.partNumber} (${c.manufacturer})`),
     ];
 
     const rows = [
-      ['Nhà sản xuất (Manufacturer)', originalPart.manufacturer, ...selectedCandidates.map((c) => c.manufacturer)],
-      ['Đóng gói (Package)', originalPart.package, ...selectedCandidates.map((c) => c.package)],
-      ['Vòng đời (Lifecycle)', originalPart.lifecycleStatus, ...selectedCandidates.map((c) => c.lifecycleStatus)],
-      ['Phân loại thay thế', 'Part Gốc', ...selectedCandidates.map((c) => c.replacementType)],
-      ['Độ tương thích (%)', '100%', ...selectedCandidates.map((c) => `${c.compatibilityScore}%`)],
-      ['Giá DigiKey (Est)', 'N/A', ...selectedCandidates.map((c) => c.pricing?.digikey?.unitPrice || 'N/A')],
-      ['Giá Mouser (Est)', 'N/A', ...selectedCandidates.map((c) => c.pricing?.mouser?.unitPrice || 'N/A')],
-      ['Nơi giá rẻ hơn', 'N/A', ...selectedCandidates.map((c) => c.pricing?.cheapestDistributor || 'N/A')],
+      [isVi ? 'Hãng sản xuất' : 'Manufacturer', originalPart.manufacturer, ...selectedCandidates.map((c) => c.manufacturer)],
+      [isVi ? 'Kiểu đóng gói' : 'Package / Footprint', originalPart.package, ...selectedCandidates.map((c) => c.package)],
+      [isVi ? 'Vòng đời sản phẩm' : 'Lifecycle Status', originalPart.lifecycleStatus, ...selectedCandidates.map((c) => c.lifecycleStatus)],
+      [isVi ? 'Phân loại thay thế' : 'Replacement Type', isVi ? 'Mã Gốc' : 'Original', ...selectedCandidates.map((c) => c.replacementType)],
+      [isVi ? 'Độ tương thích (%)' : 'Compatibility Score (%)', '100%', ...selectedCandidates.map((c) => `${c.compatibilityScore}%`)],
+      [isVi ? 'Giá DigiKey' : 'DigiKey Price', 'N/A', ...selectedCandidates.map((c) => c.pricing?.digikey?.unitPrice || 'N/A')],
+      [isVi ? 'Giá Mouser' : 'Mouser Price', 'N/A', ...selectedCandidates.map((c) => c.pricing?.mouser?.unitPrice || 'N/A')],
+      [isVi ? 'Nơi giá tốt hơn' : 'Cheaper Distributor', 'N/A', ...selectedCandidates.map((c) => c.pricing?.cheapestDistributor || 'N/A')],
       ...specKeys.map((key) => [key, getOriginalSpecValue(key), ...selectedCandidates.map((c) => getCandidateSpecValue(c, key))]),
       ['DigiKey URL', originalPart.digikeySearchUrl, ...selectedCandidates.map((c) => c.digikeySearchUrl)],
       ['Mouser URL', originalPart.mouserSearchUrl, ...selectedCandidates.map((c) => c.mouserSearchUrl)],
@@ -196,7 +197,7 @@ export const ParametricComparisonMatrix: React.FC<ParametricComparisonMatrixProp
           <div>
             <h3 className="font-bold text-base sm:text-lg">
               {language === 'vi'
-                ? 'Bảng So Sánh Thông Số & Giá (Parametric & Price Matrix)'
+                ? 'Bảng So Sánh Thông Số Kỹ Thuật & Giá'
                 : 'Detailed Parametric & Price Matrix'}
             </h3>
             <p className="text-xs text-indigo-200">
@@ -235,7 +236,7 @@ export const ParametricComparisonMatrix: React.FC<ParametricComparisonMatrixProp
               {/* Original Part Column */}
               <th className="p-3.5 font-mono min-w-[200px] bg-blue-50/50 dark:bg-blue-950/30 border-l border-r border-blue-200 dark:border-blue-900/50">
                 <span className="text-[10px] uppercase font-sans font-bold text-blue-600 dark:text-blue-400 block">
-                  {language === 'vi' ? 'Part Gốc (Target)' : 'Original Part'}
+                  {language === 'vi' ? 'Mã Part Gốc' : 'Original Part'}
                 </span>
                 <span className="text-base font-bold text-slate-900 dark:text-white block mt-0.5">
                   {originalPart.partNumber}
@@ -253,12 +254,12 @@ export const ParametricComparisonMatrix: React.FC<ParametricComparisonMatrixProp
                     <button
                       onClick={() => onRemoveCandidate(cand)}
                       className="absolute top-2.5 right-2.5 p-1 rounded-md text-slate-400 hover:text-rose-600 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-                      title="Bỏ khỏi so sánh"
+                      title={language === 'vi' ? 'Bỏ khỏi so sánh' : 'Remove from comparison'}
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
                     <span className={`text-[10px] font-sans font-bold px-1.5 py-0.5 rounded-sm inline-block ${typeConfig.badgeClass}`}>
-                      {cand.compatibilityScore}% {cand.replacementType}
+                      {cand.compatibilityScore}% {typeConfig.title}
                     </span>
                     <span className="text-base font-bold text-slate-900 dark:text-white block mt-1">
                       {cand.partNumber}
@@ -279,7 +280,7 @@ export const ParametricComparisonMatrix: React.FC<ParametricComparisonMatrixProp
                 💰 {language === 'vi' ? 'So Sánh Giá (DigiKey vs Mouser)' : 'Price (DigiKey vs Mouser)'}
               </td>
               <td className="p-3 bg-blue-50/20 dark:bg-blue-950/10 border-l border-r border-blue-200 dark:border-blue-900/50 text-slate-500 font-normal">
-                Standard
+                {language === 'vi' ? 'Gốc' : 'Standard'}
               </td>
               {selectedCandidates.map((c) => (
                 <td key={c.partNumber} className="p-3 border-r border-slate-100 dark:border-slate-800">
@@ -300,7 +301,7 @@ export const ParametricComparisonMatrix: React.FC<ParametricComparisonMatrixProp
             {/* Package */}
             <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
               <td className="p-3 font-sans font-bold text-slate-700 dark:text-slate-300 sticky left-0 bg-white dark:bg-slate-900 z-10">
-                {language === 'vi' ? 'Kiểu chân / Đóng gói (Package)' : 'Package / Footprint'}
+                {language === 'vi' ? 'Kiểu chân & Đóng gói' : 'Package / Footprint'}
               </td>
               <td className="p-3 bg-blue-50/20 dark:bg-blue-950/10 border-l border-r border-blue-200 dark:border-blue-900/50 font-bold text-blue-900 dark:text-blue-300">
                 {originalPart.package}
@@ -317,7 +318,7 @@ export const ParametricComparisonMatrix: React.FC<ParametricComparisonMatrixProp
             {/* Lifecycle */}
             <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
               <td className="p-3 font-sans font-bold text-slate-700 dark:text-slate-300 sticky left-0 bg-white dark:bg-slate-900 z-10">
-                {language === 'vi' ? 'Trạng thái vòng đời (Lifecycle)' : 'Lifecycle Status'}
+                {language === 'vi' ? 'Trạng thái vòng đời' : 'Lifecycle Status'}
               </td>
               <td className="p-3 bg-blue-50/20 dark:bg-blue-950/10 border-l border-r border-blue-200 dark:border-blue-900/50">
                 {originalPart.lifecycleStatus}
@@ -360,7 +361,7 @@ export const ParametricComparisonMatrix: React.FC<ParametricComparisonMatrixProp
             {/* Direct Distributor Stock & Buy Links */}
             <tr className="bg-slate-50/80 dark:bg-slate-800/80">
               <td className="p-3 font-sans font-bold text-slate-700 dark:text-slate-300 sticky left-0 bg-slate-50 dark:bg-slate-800 z-10">
-                {language === 'vi' ? 'Mua & Check kho' : 'Stock & Buy'}
+                {language === 'vi' ? 'Mua & Kiểm tra tồn kho' : 'Stock & Buy'}
               </td>
               <td className="p-3 bg-blue-50/30 dark:bg-blue-950/20 border-l border-r border-blue-200 dark:border-blue-900/50">
                 <div className="flex flex-col gap-1">

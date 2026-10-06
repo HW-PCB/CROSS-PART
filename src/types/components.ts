@@ -45,8 +45,7 @@ export interface DistributorPriceBreak {
 export interface PricingComparison {
   digikey?: DistributorPriceBreak;
   mouser?: DistributorPriceBreak;
-  lcsc?: DistributorPriceBreak;
-  cheapestDistributor?: 'DigiKey' | 'Mouser' | 'LCSC' | 'Tie';
+  cheapestDistributor?: 'DigiKey' | 'Mouser' | 'Tie';
   savingsEstimateVi?: string;
   savingsEstimateEn?: string;
 }
@@ -57,6 +56,7 @@ export interface ReplacementCandidate {
   replacementType: ReplacementType;
   compatibilityScore: number;
   lifecycleStatus: LifecycleStatus;
+  stockStatus?: string;
   package: string;
   mountingType?: 'SMD/SMT' | 'Through-Hole' | 'Chassis' | 'Other';
   summaryVi: string;
@@ -66,10 +66,8 @@ export interface ReplacementCandidate {
   keySpecs?: { [key: string]: string };
   parametricComparison?: ParametricSpec[];
   pricing?: PricingComparison;
-  lcscPartCode?: string;
   digikeySearchUrl: string;
   mouserSearchUrl: string;
-  lcscSearchUrl: string;
   passiveEvaluation?: PassiveEvaluation;
 }
 
@@ -86,10 +84,8 @@ export interface OriginalPartProfile {
   descriptionEn?: string;
   commonApplications?: string[];
   keySpecs?: { [key: string]: string };
-  lcscPartCode?: string;
   digikeySearchUrl: string;
   mouserSearchUrl: string;
-  lcscSearchUrl: string;
   passiveType?: PassiveComponentType;
 }
 
@@ -98,6 +94,15 @@ export interface CrossReferenceResult {
   candidates: ReplacementCandidate[];
   designRecommendationsVi?: string;
   designRecommendationsEn?: string;
+}
+
+export interface BomItemDetailedSpec {
+  name: string;
+  originalValue: string;
+  alt1Value: string;
+  alt2Value: string;
+  isMatch: boolean;
+  notes?: string;
 }
 
 export interface BomItemResult {
@@ -109,6 +114,7 @@ export interface BomItemResult {
   package?: string;
   lifecycleStatus?: LifecycleStatus;
   originalKeySpecs?: string;
+  detailedSpecs?: BomItemDetailedSpec[];
   
   // Passive classification & compliance
   isPassive?: boolean;
@@ -121,17 +127,16 @@ export interface BomItemResult {
   replacementType: ReplacementType;
   compatibilityScore: number;
   replacementLifecycle?: string;
+  replacementStockStatus?: string;
   replacementKeySpecs?: string;
   replacementSpecsComparison?: string;
-  lcscPartCode?: string;
   digikeyPrice?: string;
   mouserPrice?: string;
-  lcscPrice?: string;
-  cheapestDistributor?: 'DigiKey' | 'Mouser' | 'LCSC' | 'Tie';
+  cheapestDistributor?: 'DigiKey' | 'Mouser' | 'Tie';
   digikeyUrl: string;
   mouserUrl: string;
-  lcscUrl: string;
   noteVi: string;
+  noteEn?: string;
   riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH';
 
   // Alternative 2 (Lựa chọn thay thế 2)
@@ -140,17 +145,16 @@ export interface BomItemResult {
   alt2ReplacementType?: ReplacementType;
   alt2CompatibilityScore?: number;
   alt2Lifecycle?: string;
+  alt2StockStatus?: string;
   alt2KeySpecs?: string;
   alt2SpecsComparison?: string;
-  alt2LcscPartCode?: string;
   alt2DigikeyPrice?: string;
   alt2MouserPrice?: string;
-  alt2LcscPrice?: string;
-  alt2CheapestDistributor?: 'DigiKey' | 'Mouser' | 'LCSC' | 'Tie';
+  alt2CheapestDistributor?: 'DigiKey' | 'Mouser' | 'Tie';
   alt2DigikeyUrl?: string;
   alt2MouserUrl?: string;
-  alt2LcscUrl?: string;
   alt2NoteVi?: string;
+  alt2NoteEn?: string;
 }
 
 export interface PinoutComparisonResult {
@@ -165,5 +169,7 @@ export interface PinoutComparisonResult {
   }[];
   pcbModificationsRequired: boolean;
   circuitModificationsNoticeVi?: string;
+  circuitModificationsNoticeEn?: string;
   verdictVi: string;
+  verdictEn?: string;
 }

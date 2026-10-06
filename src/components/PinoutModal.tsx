@@ -72,7 +72,7 @@ export const PinoutModal: React.FC<PinoutModalProps> = ({
             </div>
             <div>
               <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                {language === 'vi' ? 'Kiểm Tra Sơ Đồ Chân Cắm (Pinout Verification)' : 'Pinout & Footprint Verification'}
+                {language === 'vi' ? 'Kiểm Tra Sơ Đồ Chân Cắm' : 'Pinout & Footprint Verification'}
               </h3>
               <p className="text-xs text-slate-500 font-mono">
                 {originalPartNumber} ➔ {candidate.partNumber}
@@ -126,13 +126,15 @@ export const PinoutModal: React.FC<PinoutModalProps> = ({
                   <h4 className="font-bold text-sm">
                     {data.isPinToPinDropIn
                       ? language === 'vi'
-                        ? '100% Khớp Chân (Pin-to-Pin Drop-In)!'
+                        ? '100% Khớp Chân Cắm Hoàn Toàn!'
                         : '100% Pin-to-Pin Drop-in Compatible!'
                       : language === 'vi'
                         ? 'Cần chú ý sơ đồ chân hoặc chân chức năng đặc thù'
                         : 'Notice: Review pin functions & passive circuitry'}
                   </h4>
-                  <p className="text-xs mt-1 leading-relaxed">{data.verdictVi}</p>
+                  <p className="text-xs mt-1 leading-relaxed">
+                    {language === 'vi' ? data.verdictVi : (data.verdictEn || data.verdictVi)}
+                  </p>
                 </div>
               </div>
 
@@ -141,7 +143,7 @@ export const PinoutModal: React.FC<PinoutModalProps> = ({
                 <div>
                   <h5 className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                     <Radio className="w-3.5 h-3.5 text-blue-500" />
-                    <span>{language === 'vi' ? 'Bảng đối chiếu từng chân (Pin-by-Pin Mapping)' : 'Pin-by-Pin Mapping'}</span>
+                    <span>{language === 'vi' ? 'Bảng đối chiếu từng chân cắm' : 'Pin-by-Pin Mapping'}</span>
                   </h5>
                   <div className="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden text-xs">
                     <table className="w-full text-left font-mono">
@@ -150,7 +152,7 @@ export const PinoutModal: React.FC<PinoutModalProps> = ({
                           <th className="py-2.5 px-3">Pin #</th>
                           <th className="py-2.5 px-3">{originalPartNumber}</th>
                           <th className="py-2.5 px-3">{candidate.partNumber}</th>
-                          <th className="py-2.5 px-3 text-right">Khớp</th>
+                          <th className="py-2.5 px-3 text-right">{language === 'vi' ? 'Khớp' : 'Match'}</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -183,13 +185,13 @@ export const PinoutModal: React.FC<PinoutModalProps> = ({
               )}
 
               {/* Circuit Modification Notice */}
-              {data.circuitModificationsNoticeVi && (
+              {(data.circuitModificationsNoticeVi || data.circuitModificationsNoticeEn) && (
                 <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 text-xs">
                   <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">
-                    {language === 'vi' ? 'Lưu ý sửa đổi mạch (nếu có):' : 'PCB & Circuit adjustments note:'}
+                    {language === 'vi' ? 'Lưu ý điều chỉnh mạch (nếu có):' : 'PCB & Circuit adjustments note:'}
                   </span>
                   <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-                    {data.circuitModificationsNoticeVi}
+                    {language === 'vi' ? data.circuitModificationsNoticeVi : (data.circuitModificationsNoticeEn || data.circuitModificationsNoticeVi)}
                   </p>
                 </div>
               )}

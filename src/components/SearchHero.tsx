@@ -101,7 +101,7 @@ export const SearchHero: React.FC<SearchHeroProps> = ({ onSearch, isLoading, lan
                     ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800'
                     : 'text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'
                 }`}
-                title="Tùy chọn lọc nâng cao"
+                title={language === 'vi' ? 'Tùy chọn lọc nâng cao' : 'Advanced filter options'}
               >
                 <SlidersHorizontal className="w-3.5 h-3.5" />
                 <span>{language === 'vi' ? 'Bộ lọc' : 'Filters'}</span>
@@ -138,7 +138,7 @@ export const SearchHero: React.FC<SearchHeroProps> = ({ onSearch, isLoading, lan
                   <div className="flex flex-wrap gap-1.5">
                     {[
                       { id: 'all', labelVi: 'Tất cả tương đương', labelEn: 'All Equivalents' },
-                      { id: 'drop_in', labelVi: 'Drop-in 100% Pinout', labelEn: '100% Drop-in' },
+                      { id: 'drop_in', labelVi: 'Thay thế 100% chân cắm', labelEn: '100% Drop-in' },
                       { id: 'pin_compatible', labelVi: 'Tương thích chân', labelEn: 'Pin Compatible' },
                       { id: 'upgraded', labelVi: 'Linh kiện nâng cấp', labelEn: 'Upgraded Specs' },
                     ].map((opt) => (
@@ -192,6 +192,18 @@ export const SearchHero: React.FC<SearchHeroProps> = ({ onSearch, isLoading, lan
             </div>
           )}
         </form>
+
+        {/* Priority indicators */}
+        <div className="mt-3 flex items-center justify-center flex-wrap gap-2 text-xs">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-semibold text-[11px]">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            {language === 'vi' ? 'Ưu tiên #1: Trạng thái Active (Đang sản xuất)' : 'Priority #1: Active Status'}
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800 font-semibold text-[11px]">
+            <span className="w-1.5 h-1.5 rounded-full bg-teal-500"></span>
+            {language === 'vi' ? 'Ưu tiên #2: Sẵn hàng (In-Stock DigiKey · Mouser)' : 'Priority #2: In-Stock Inventory'}
+          </span>
+        </div>
       </div>
 
       {/* Quick presets chips */}

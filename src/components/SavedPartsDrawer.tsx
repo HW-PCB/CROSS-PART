@@ -80,7 +80,7 @@ export const SavedPartsDrawer: React.FC<SavedPartsDrawerProps> = ({
                     <button
                       onClick={() => onRemoveSaved(candidate.partNumber)}
                       className="p-1 rounded text-slate-400 hover:text-rose-600 transition-colors"
-                      title="Xóa khỏi danh sách lưu"
+                      title={language === 'vi' ? 'Xóa khỏi danh sách lưu' : 'Remove from saved'}
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -101,7 +101,7 @@ export const SavedPartsDrawer: React.FC<SavedPartsDrawerProps> = ({
 
                   <div className="mt-2 text-xs bg-slate-50 dark:bg-slate-800/60 p-2 rounded-lg text-slate-600 dark:text-slate-300">
                     <span className="font-semibold text-slate-700 dark:text-slate-200">
-                      {language === 'vi' ? 'Thay thế cho part: ' : 'Alternative for: '}
+                      {language === 'vi' ? 'Thay thế cho mã: ' : 'Alternative for: '}
                     </span>
                     <button
                       onClick={() => onInspectPart(originalPart)}

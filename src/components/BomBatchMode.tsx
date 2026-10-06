@@ -24,6 +24,7 @@ import {
   RefreshCw,
   Eye,
   SlidersHorizontal,
+  PackageCheck,
 } from 'lucide-react';
 
 interface BomBatchModeProps {
@@ -40,7 +41,7 @@ MAX232CPE
 TL072CP
 NE555P
 DS1307ZN
-C2040`;
+AMS1117-3.3`;
 
 export const BomBatchMode: React.FC<BomBatchModeProps> = ({ language, onInspectPart }) => {
   const [activeInputMethod, setActiveInputMethod] = useState<'excel' | 'text'>('excel');
@@ -697,11 +698,16 @@ export const BomBatchMode: React.FC<BomBatchModeProps> = ({ language, onInspectP
                     <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
                       <span>{language === 'vi' ? `Kết quả thay thế (${results.length} linh kiện)` : `Cross-Referenced Results (${results.length} parts)`}</span>
                     </h3>
-                    <p className="text-xs text-slate-500">
-                      {language === 'vi'
-                        ? 'Đã đối chiếu thông số & giá thành trên DigiKey và Mouser'
-                        : 'Matches with DigiKey and Mouser price comparison'}
-                    </p>
+                    <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 text-[10px] font-bold">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        {language === 'vi' ? 'Ưu tiên Part Status: Active (Đang sản xuất)' : 'Priority: Active Lifecycle'}
+                      </span>
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-300 border border-teal-300 dark:border-teal-800 text-[10px] font-bold">
+                        <PackageCheck className="w-3 h-3 text-teal-600" />
+                        {language === 'vi' ? 'Ưu tiên Tồn kho: In-Stock (DigiKey · Mouser)' : 'Priority: In-Stock Inventory'}
+                      </span>
+                    </div>
                   </div>
 
                   {/* Primary Export to Excel button */}
@@ -718,15 +724,15 @@ export const BomBatchMode: React.FC<BomBatchModeProps> = ({ language, onInspectP
                   <table className="w-full text-left text-xs">
                     <thead className="bg-slate-100 dark:bg-slate-800/90 text-[11px] font-semibold text-slate-500 uppercase">
                       <tr>
-                        <th className="py-2.5 px-3">Vị trí / Qty</th>
-                        <th className="py-2.5 px-3">Part Gốc</th>
+                        <th className="py-2.5 px-3">{language === 'vi' ? 'Vị Trí / SL' : 'Designator / Qty'}</th>
+                        <th className="py-2.5 px-3">{language === 'vi' ? 'Mã Gốc' : 'Original Part'}</th>
                         <th className="py-2.5 px-3 bg-blue-50/50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-300">
                           {language === 'vi' ? 'Lựa Chọn 1 (Drop-in)' : 'Alternative 1 (Drop-in)'}
                         </th>
                         <th className="py-2.5 px-3 bg-cyan-50/50 dark:bg-cyan-950/20 text-cyan-700 dark:text-cyan-300">
-                          {language === 'vi' ? 'Lựa Chọn 2 (Tiết Kiệm / Pin-Comp)' : 'Alternative 2 (Cost-Effective)'}
+                          {language === 'vi' ? 'Lựa Chọn 2 (Tiết Kiệm)' : 'Alternative 2 (Cost-Effective)'}
                         </th>
-                        <th className="py-2.5 px-3">Ghi Chú Kỹ Thuật</th>
+                        <th className="py-2.5 px-3">{language === 'vi' ? 'Ghi Chú Kỹ Thuật' : 'Engineering Notes'}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-mono">
@@ -741,7 +747,7 @@ export const BomBatchMode: React.FC<BomBatchModeProps> = ({ language, onInspectP
                                 {row.designator || `#${idx + 1}`}
                               </span>
                               <span className="text-[10px] text-slate-400 font-sans block">
-                                Qty: {row.quantity || 1}
+                                {language === 'vi' ? 'SL' : 'Qty'}: {row.quantity || 1}
                               </span>
                             </td>
 
@@ -750,30 +756,32 @@ export const BomBatchMode: React.FC<BomBatchModeProps> = ({ language, onInspectP
                               <button
                                 onClick={() => onInspectPart(row.originalPart)}
                                 className="font-bold text-blue-600 dark:text-blue-400 hover:underline text-left block"
-                                title="Tra cứu chuyên sâu part này"
+                                title={language === 'vi' ? 'Tra cứu chuyên sâu mã này' : 'Deep inspect this part'}
                               >
                                 {row.originalPart}
                               </button>
                               <div className="text-[10px] text-slate-500 font-sans mt-0.5">
-                                <span className="font-semibold text-slate-700 dark:text-slate-300">{row.originalManufacturer || 'Hãng Gốc'}</span>
+                                <span className="font-semibold text-slate-700 dark:text-slate-300">{row.originalManufacturer || (language === 'vi' ? 'Hãng Gốc' : 'Original Mfr')}</span>
                                 <span> · </span>
                                 <span className="font-mono bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">{row.package || row.category || 'Footprint'}</span>
                               </div>
                               {row.originalKeySpecs && (
                                 <div className="mt-1.5 p-1.5 rounded-lg bg-slate-100/70 dark:bg-slate-800/70 border border-slate-200/60 dark:border-slate-700/60 text-[10px] text-slate-600 dark:text-slate-300 font-mono">
-                                  <span className="text-[9px] uppercase font-bold text-slate-400 block mb-0.5">Thông số gốc:</span>
+                                  <span className="text-[9px] uppercase font-bold text-slate-400 block mb-0.5">
+                                    {language === 'vi' ? 'Thông số gốc:' : 'Original specs:'}
+                                  </span>
                                   <span className="line-clamp-2">{row.originalKeySpecs}</span>
                                 </div>
                               )}
                               {/* Passive Component Priority Compliance Badge */}
                               {(row.passiveType === 'resistor' || row.originalPart.startsWith('RC') || row.originalPart.startsWith('CRCW') || (row.designator && row.designator.startsWith('R'))) && (
                                 <span className="inline-block mt-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-800 font-sans">
-                                  ⚡ R: 4/4 Tiêu Chí (R, Vỏ, Tol ≤, Temp)
+                                  ⚡ R: 4/4 {language === 'vi' ? 'Tiêu Chí (R, Vỏ, Tol ≤, Temp)' : 'Rules (R, Pkg, Tol ≤, Temp)'}
                                 </span>
                               )}
                               {(row.passiveType === 'capacitor' || row.originalPart.startsWith('CC') || row.originalPart.startsWith('GRM') || (row.designator && row.designator.startsWith('C'))) && (
                                 <span className="inline-block mt-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-cyan-100 text-cyan-800 dark:bg-cyan-950 dark:text-cyan-300 border border-cyan-300 dark:border-cyan-800 font-sans">
-                                  ⚡ C: 5/5 Tiêu Chí (C, Vỏ, V ≥, Tol ≤, Temp)
+                                  ⚡ C: 5/5 {language === 'vi' ? 'Tiêu Chí (C, Vỏ, V ≥, Tol ≤, Temp)' : 'Rules (C, Pkg, V ≥, Tol ≤, Temp)'}
                                 </span>
                               )}
                             </td>
@@ -793,31 +801,37 @@ export const BomBatchMode: React.FC<BomBatchModeProps> = ({ language, onInspectP
                                 <div className="flex flex-wrap items-center gap-1 text-[10px]">
                                   <span className="text-slate-700 dark:text-slate-300 font-semibold font-sans">{row.replacementManufacturer}</span>
                                   <span className="px-1.5 py-0.2 rounded bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 text-[9px] font-bold font-sans">
-                                    ✓ Khác Hãng Gốc
+                                    ✓ {language === 'vi' ? 'Khác Hãng Gốc' : 'Cross-Mfr'}
                                   </span>
                                   <span className={`px-1 py-0.2 rounded font-sans font-medium ${typeConfig1.badgeClass}`}>
-                                    {row.replacementType}
+                                    {typeConfig1.title}
+                                  </span>
+                                  <span className="px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-[9px] font-bold font-sans">
+                                    ✓ Active
+                                  </span>
+                                  <span className="px-1.5 py-0.2 rounded bg-teal-50 text-teal-700 dark:bg-teal-950 dark:text-teal-300 border border-teal-200 dark:border-teal-800 text-[9px] font-bold font-sans">
+                                    📦 In-Stock
                                   </span>
                                 </div>
 
                                 {/* Thông số kỹ thuật tương đương so với gốc */}
                                 <div className="p-2 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/80 dark:border-blue-900/50 space-y-1">
                                   <div className="text-[10px] font-bold text-blue-900 dark:text-blue-300 flex items-center justify-between">
-                                    <span>⚡ Thông số tương đương:</span>
+                                    <span>⚡ {language === 'vi' ? 'Thông số tương đương:' : 'Equivalent specs:'}</span>
                                     <button
                                       type="button"
                                       onClick={() => setDetailModalItem(row)}
                                       className="text-[9px] text-blue-600 dark:text-blue-400 hover:underline cursor-pointer font-bold"
                                     >
-                                      Đối chiếu →
+                                      {language === 'vi' ? 'Đối chiếu →' : 'Compare →'}
                                     </button>
                                   </div>
                                   <div className="text-[10px] font-mono text-slate-800 dark:text-slate-200">
-                                    {row.replacementKeySpecs || row.package || 'Khớp thông số kỹ thuật'}
+                                    {row.replacementKeySpecs || row.package || (language === 'vi' ? 'Khớp thông số kỹ thuật' : 'Specs matched')}
                                   </div>
                                   {row.replacementSpecsComparison && (
                                     <div className="text-[9px] text-emerald-700 dark:text-emerald-300 font-sans font-medium pt-1 border-t border-blue-200/50 dark:border-blue-900/30 flex items-start gap-1">
-                                      <span className="font-bold shrink-0">✓ Đối chiếu:</span>
+                                      <span className="font-bold shrink-0">{language === 'vi' ? '✓ Đối chiếu:' : '✓ Compare:'}</span>
                                       <span>{row.replacementSpecsComparison}</span>
                                     </div>
                                   )}
@@ -829,7 +843,7 @@ export const BomBatchMode: React.FC<BomBatchModeProps> = ({ language, onInspectP
                                   className="w-full py-1 px-2 rounded-lg bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-[10px] font-semibold text-blue-600 dark:text-blue-300 flex items-center justify-center gap-1 transition-colors cursor-pointer"
                                 >
                                   <SlidersHorizontal className="w-3 h-3" />
-                                  <span>Xem chi tiết đối chiếu thông số</span>
+                                  <span>{language === 'vi' ? 'Xem chi tiết đối chiếu thông số' : 'View detailed spec comparison'}</span>
                                 </button>
                               </div>
                             </td>
@@ -847,33 +861,39 @@ export const BomBatchMode: React.FC<BomBatchModeProps> = ({ language, onInspectP
                                 </div>
 
                                 <div className="flex flex-wrap items-center gap-1 text-[10px]">
-                                  <span className="text-slate-700 dark:text-slate-300 font-semibold font-sans">{row.alt2Manufacturer || 'Hãng Thay Thế'}</span>
+                                  <span className="text-slate-700 dark:text-slate-300 font-semibold font-sans">{row.alt2Manufacturer || (language === 'vi' ? 'Hãng Thay Thế' : 'Alternate Mfr')}</span>
                                   <span className="px-1.5 py-0.2 rounded bg-cyan-50 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800 text-[9px] font-bold font-sans">
-                                    ✓ Khác Hãng Gốc
+                                    ✓ {language === 'vi' ? 'Khác Hãng Gốc' : 'Cross-Mfr'}
                                   </span>
                                   <span className={`px-1 py-0.2 rounded font-sans font-medium ${typeConfig2.badgeClass}`}>
-                                    {row.alt2ReplacementType || 'DROP_IN'}
+                                    {typeConfig2.title}
+                                  </span>
+                                  <span className="px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-[9px] font-bold font-sans">
+                                    ✓ Active
+                                  </span>
+                                  <span className="px-1.5 py-0.2 rounded bg-teal-50 text-teal-700 dark:bg-teal-950 dark:text-teal-300 border border-teal-200 dark:border-teal-800 text-[9px] font-bold font-sans">
+                                    📦 In-Stock
                                   </span>
                                 </div>
 
                                 {/* Thông số kỹ thuật tương đương so với gốc */}
                                 <div className="p-2 rounded-xl bg-cyan-50/70 dark:bg-cyan-950/30 border border-cyan-200/80 dark:border-cyan-900/50 space-y-1">
                                   <div className="text-[10px] font-bold text-cyan-900 dark:text-cyan-300 flex items-center justify-between">
-                                    <span>⚡ Thông số tương đương:</span>
+                                    <span>⚡ {language === 'vi' ? 'Thông số tương đương:' : 'Equivalent specs:'}</span>
                                     <button
                                       type="button"
                                       onClick={() => setDetailModalItem(row)}
                                       className="text-[9px] text-cyan-600 dark:text-cyan-400 hover:underline cursor-pointer font-bold"
                                     >
-                                      Đối chiếu →
+                                      {language === 'vi' ? 'Đối chiếu →' : 'Compare →'}
                                     </button>
                                   </div>
                                   <div className="text-[10px] font-mono text-slate-800 dark:text-slate-200">
-                                    {row.alt2KeySpecs || row.package || 'Khớp thông số kỹ thuật'}
+                                    {row.alt2KeySpecs || row.package || (language === 'vi' ? 'Khớp thông số kỹ thuật' : 'Specs matched')}
                                   </div>
                                   {row.alt2SpecsComparison && (
                                     <div className="text-[9px] text-teal-700 dark:text-teal-300 font-sans font-medium pt-1 border-t border-cyan-200/50 dark:border-cyan-900/30 flex items-start gap-1">
-                                      <span className="font-bold shrink-0">✓ Đối chiếu:</span>
+                                      <span className="font-bold shrink-0">{language === 'vi' ? '✓ Đối chiếu:' : '✓ Compare:'}</span>
                                       <span>{row.alt2SpecsComparison}</span>
                                     </div>
                                   )}
@@ -915,10 +935,10 @@ export const BomBatchMode: React.FC<BomBatchModeProps> = ({ language, onInspectP
 
                             {/* Engineering Notes */}
                             <td className="py-3 px-3 font-sans text-slate-600 dark:text-slate-300 max-w-xs text-[11px] leading-relaxed">
-                              <div>{row.noteVi}</div>
-                              {row.alt2NoteVi && (
+                              <div>{language === 'vi' ? row.noteVi : (row.noteEn || row.noteVi)}</div>
+                              {(row.alt2NoteVi || row.alt2NoteEn) && (
                                 <div className="mt-1 text-[10px] text-slate-400">
-                                  • {row.alt2NoteVi}
+                                  • {language === 'vi' ? row.alt2NoteVi : (row.alt2NoteEn || row.alt2NoteVi)}
                                 </div>
                               )}
                             </td>
@@ -966,7 +986,7 @@ export const BomBatchMode: React.FC<BomBatchModeProps> = ({ language, onInspectP
                         : 'Parametric Comparison: Original vs Cross Candidates'}
                     </h3>
                     <p className="text-xs text-slate-500">
-                      Vị trí: <strong className="font-mono text-slate-700 dark:text-slate-300">{detailModalItem.designator || 'N/A'}</strong> · Số lượng: <strong className="font-mono text-slate-700 dark:text-slate-300">{detailModalItem.quantity || 1}</strong>
+                      {language === 'vi' ? 'Vị trí:' : 'Designator:'} <strong className="font-mono text-slate-700 dark:text-slate-300">{detailModalItem.designator || 'N/A'}</strong> · {language === 'vi' ? 'Số lượng:' : 'Qty:'} <strong className="font-mono text-slate-700 dark:text-slate-300">{detailModalItem.quantity || 1}</strong>
                     </p>
                   </div>
                 </div>
@@ -1005,15 +1025,21 @@ export const BomBatchMode: React.FC<BomBatchModeProps> = ({ language, onInspectP
                       {language === 'vi' ? 'Tiêu Chí Kỹ Thuật' : 'Specification'}
                     </th>
                     <th className="py-3 px-4 font-bold text-slate-900 dark:text-white w-1/4 bg-slate-200/50 dark:bg-slate-800/90">
-                      <div className="text-[10px] text-slate-500 uppercase font-sans">Mã Gốc (Original)</div>
+                      <div className="text-[10px] text-slate-500 uppercase font-sans">
+                        {language === 'vi' ? 'Mã Gốc' : 'Original Part'}
+                      </div>
                       <div className="text-sm font-mono text-blue-600 dark:text-blue-400">{detailModalItem.originalPart}</div>
                     </th>
                     <th className="py-3 px-4 font-bold text-slate-900 dark:text-white w-1/4 bg-blue-50/60 dark:bg-blue-950/30">
-                      <div className="text-[10px] text-blue-600 dark:text-blue-400 uppercase font-sans">Lựa Chọn 1 (Drop-in)</div>
+                      <div className="text-[10px] text-blue-600 dark:text-blue-400 uppercase font-sans">
+                        {language === 'vi' ? 'Lựa Chọn 1 (Drop-in)' : 'Option 1 (Drop-in)'}
+                      </div>
                       <div className="text-sm font-mono text-slate-900 dark:text-white">{detailModalItem.replacementPart}</div>
                     </th>
                     <th className="py-3 px-4 font-bold text-slate-900 dark:text-white w-1/4 bg-cyan-50/60 dark:bg-cyan-950/30">
-                      <div className="text-[10px] text-cyan-600 dark:text-cyan-400 uppercase font-sans">Lựa Chọn 2 (Tiết kiệm)</div>
+                      <div className="text-[10px] text-cyan-600 dark:text-cyan-400 uppercase font-sans">
+                        {language === 'vi' ? 'Lựa Chọn 2 (Tiết kiệm)' : 'Option 2 (Alternative)'}
+                      </div>
                       <div className="text-sm font-mono text-slate-900 dark:text-white">{detailModalItem.alt2ReplacementPart || detailModalItem.replacementPart}</div>
                     </th>
                   </tr>
@@ -1022,68 +1048,165 @@ export const BomBatchMode: React.FC<BomBatchModeProps> = ({ language, onInspectP
                   {/* Manufacturer Row */}
                   <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
                     <td className="py-3 px-4 font-sans font-bold text-slate-700 dark:text-slate-300">
-                      1. Hãng sản xuất (Mfr)
+                      {language === 'vi' ? '1. Hãng sản xuất' : '1. Manufacturer'}
                     </td>
                     <td className="py-3 px-4 text-slate-700 dark:text-slate-300 bg-slate-50/40 dark:bg-slate-800/40">
-                      {detailModalItem.originalManufacturer || 'Hãng Gốc'}
+                      {detailModalItem.originalManufacturer || (language === 'vi' ? 'Hãng Gốc' : 'Original Mfr')}
                     </td>
                     <td className="py-3 px-4 font-semibold text-emerald-700 dark:text-emerald-400 bg-blue-50/20 dark:bg-blue-950/10">
                       <div>{detailModalItem.replacementManufacturer}</div>
-                      <span className="text-[10px] font-sans font-bold text-indigo-600 dark:text-indigo-400">✓ Khác hãng gốc</span>
+                      <span className="text-[10px] font-sans font-bold text-indigo-600 dark:text-indigo-400">
+                        ✓ {language === 'vi' ? 'Khác hãng gốc' : 'Cross-Mfr'}
+                      </span>
                     </td>
                     <td className="py-3 px-4 font-semibold text-emerald-700 dark:text-emerald-400 bg-cyan-50/20 dark:bg-cyan-950/10">
-                      <div>{detailModalItem.alt2Manufacturer || 'Hãng Thay Thế'}</div>
-                      <span className="text-[10px] font-sans font-bold text-indigo-600 dark:text-indigo-400">✓ Khác hãng gốc</span>
+                      <div>{detailModalItem.alt2Manufacturer || (language === 'vi' ? 'Hãng Thay Thế' : 'Alternate Mfr')}</div>
+                      <span className="text-[10px] font-sans font-bold text-indigo-600 dark:text-indigo-400">
+                        ✓ {language === 'vi' ? 'Khác hãng gốc' : 'Cross-Mfr'}
+                      </span>
                     </td>
                   </tr>
 
                   {/* Package / Footprint */}
                   <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
                     <td className="py-3 px-4 font-sans font-bold text-slate-700 dark:text-slate-300">
-                      2. Đóng gói / Footprint
+                      {language === 'vi' ? '2. Kiểu chân & Đóng gói' : '2. Package & Footprint'}
                     </td>
                     <td className="py-3 px-4 text-slate-700 dark:text-slate-300 bg-slate-50/40 dark:bg-slate-800/40">
-                      {detailModalItem.package || 'Tiêu chuẩn'}
+                      {detailModalItem.package || (language === 'vi' ? 'Tiêu chuẩn' : 'Standard')}
                     </td>
                     <td className="py-3 px-4 font-bold text-slate-900 dark:text-white bg-blue-50/20 dark:bg-blue-950/10">
-                      <div>{detailModalItem.package || 'Tiêu chuẩn'}</div>
-                      <span className="text-[10px] font-sans text-emerald-600 dark:text-emerald-400 font-bold">✓ Khớp đúng 100% vỏ</span>
+                      <div>{detailModalItem.package || (language === 'vi' ? 'Tiêu chuẩn' : 'Standard')}</div>
+                      <span className="text-[10px] font-sans text-emerald-600 dark:text-emerald-400 font-bold">
+                        ✓ {language === 'vi' ? 'Khớp đúng 100% vỏ' : '100% Footprint Match'}
+                      </span>
                     </td>
                     <td className="py-3 px-4 font-bold text-slate-900 dark:text-white bg-cyan-50/20 dark:bg-cyan-950/10">
-                      <div>{detailModalItem.package || 'Tiêu chuẩn'}</div>
-                      <span className="text-[10px] font-sans text-emerald-600 dark:text-emerald-400 font-bold">✓ Khớp đúng 100% vỏ</span>
+                      <div>{detailModalItem.package || (language === 'vi' ? 'Tiêu chuẩn' : 'Standard')}</div>
+                      <span className="text-[10px] font-sans text-emerald-600 dark:text-emerald-400 font-bold">
+                        ✓ {language === 'vi' ? 'Khớp đúng 100% vỏ' : '100% Footprint Match'}
+                      </span>
                     </td>
                   </tr>
 
-                  {/* Key Parameters */}
+                  {/* Part Status (Lifecycle) */}
                   <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
                     <td className="py-3 px-4 font-sans font-bold text-slate-700 dark:text-slate-300">
-                      3. Thông số điện chính
+                      {language === 'vi' ? '3. Trạng thái vòng đời (Part Status)' : '3. Lifecycle Status'}
                     </td>
-                    <td className="py-3 px-4 text-slate-700 dark:text-slate-300 bg-slate-50/40 dark:bg-slate-800/40 text-[11px]">
-                      {detailModalItem.originalKeySpecs || 'Thông số chuẩn theo datasheet gốc'}
+                    <td className="py-3 px-4 text-slate-700 dark:text-slate-300 bg-slate-50/40 dark:bg-slate-800/40">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        {detailModalItem.lifecycleStatus || 'Active'}
+                      </span>
                     </td>
-                    <td className="py-3 px-4 font-bold text-indigo-700 dark:text-indigo-300 bg-blue-50/20 dark:bg-blue-950/10 text-[11px]">
-                      <div>{detailModalItem.replacementKeySpecs || 'Tương đương thông số gốc'}</div>
-                      <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-sans font-normal mt-1">
-                        {detailModalItem.replacementSpecsComparison}
+                    <td className="py-3 px-4 font-bold text-slate-900 dark:text-white bg-blue-50/20 dark:bg-blue-950/10">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        {detailModalItem.replacementLifecycle || 'Active'}
+                      </span>
+                      <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-normal mt-0.5">
+                        ✓ {language === 'vi' ? 'Đang sản xuất hàng loạt' : 'Active mass production'}
                       </div>
                     </td>
-                    <td className="py-3 px-4 font-bold text-cyan-700 dark:text-cyan-300 bg-cyan-50/20 dark:bg-cyan-950/10 text-[11px]">
-                      <div>{detailModalItem.alt2KeySpecs || 'Tương đương thông số gốc'}</div>
-                      <div className="text-[10px] text-teal-600 dark:text-teal-400 font-sans font-normal mt-1">
-                        {detailModalItem.alt2SpecsComparison}
+                    <td className="py-3 px-4 font-bold text-slate-900 dark:text-white bg-cyan-50/20 dark:bg-cyan-950/10">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        {detailModalItem.alt2Lifecycle || 'Active'}
+                      </span>
+                      <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-normal mt-0.5">
+                        ✓ {language === 'vi' ? 'Đang sản xuất hàng loạt' : 'Active mass production'}
                       </div>
                     </td>
                   </tr>
+
+                  {/* Stock Availability */}
+                  <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+                    <td className="py-3 px-4 font-sans font-bold text-slate-700 dark:text-slate-300">
+                      {language === 'vi' ? '4. Tình trạng tồn kho (Stock)' : '4. Stock Availability'}
+                    </td>
+                    <td className="py-3 px-4 text-slate-700 dark:text-slate-300 bg-slate-50/40 dark:bg-slate-800/40">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold text-teal-700 bg-teal-50 dark:bg-teal-950/40 dark:text-teal-300 border border-teal-200 dark:border-teal-800">
+                        <PackageCheck className="w-3 h-3 text-teal-600" />
+                        {language === 'vi' ? 'Sẵn hàng kho' : 'In-Stock'}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 font-bold text-slate-900 dark:text-white bg-blue-50/20 dark:bg-blue-950/10">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold text-teal-700 bg-teal-50 dark:bg-teal-950/40 dark:text-teal-300 border border-teal-200 dark:border-teal-800">
+                        <PackageCheck className="w-3 h-3 text-teal-600" />
+                        {detailModalItem.replacementStockStatus || 'Sẵn hàng (In-Stock)'}
+                      </span>
+                      <div className="text-[10px] text-teal-600 dark:text-teal-400 font-normal mt-0.5">
+                        ✓ DigiKey & Mouser
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 font-bold text-slate-900 dark:text-white bg-cyan-50/20 dark:bg-cyan-950/10">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold text-teal-700 bg-teal-50 dark:bg-teal-950/40 dark:text-teal-300 border border-teal-200 dark:border-teal-800">
+                        <PackageCheck className="w-3 h-3 text-teal-600" />
+                        {detailModalItem.alt2StockStatus || 'Sẵn hàng (In-Stock)'}
+                      </span>
+                      <div className="text-[10px] text-teal-600 dark:text-teal-400 font-normal mt-0.5">
+                        ✓ DigiKey & Mouser
+                      </div>
+                    </td>
+                  </tr>
+
+                  {/* Key Parameters / Detailed Specifications */}
+                  {detailModalItem.detailedSpecs && detailModalItem.detailedSpecs.length > 0 ? (
+                    detailModalItem.detailedSpecs.map((spec, sIdx) => (
+                      <tr key={`spec-${sIdx}`} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+                        <td className="py-2.5 px-4 font-sans font-bold text-slate-700 dark:text-slate-300 text-xs">
+                          <span className="text-slate-800 dark:text-slate-200">
+                            {sIdx + 5}. {spec.name}
+                          </span>
+                        </td>
+                        <td className="py-2.5 px-4 text-slate-700 dark:text-slate-300 bg-slate-50/40 dark:bg-slate-800/40 text-[11px] font-mono">
+                          {spec.originalValue}
+                        </td>
+                        <td className="py-2.5 px-4 text-indigo-700 dark:text-indigo-300 bg-blue-50/20 dark:bg-blue-950/10 text-[11px] font-mono">
+                          <div className="font-bold">{spec.alt1Value}</div>
+                          <span className="inline-flex items-center gap-0.5 text-[9px] font-sans font-bold text-emerald-600 dark:text-emerald-400">
+                            ✓ {spec.isMatch ? (language === 'vi' ? 'Khớp tiêu chuẩn' : 'Matches') : (language === 'vi' ? 'Tương đương' : 'Equivalent')}
+                          </span>
+                        </td>
+                        <td className="py-2.5 px-4 text-cyan-700 dark:text-cyan-300 bg-cyan-50/20 dark:bg-cyan-950/10 text-[11px] font-mono">
+                          <div className="font-bold">{spec.alt2Value}</div>
+                          <span className="inline-flex items-center gap-0.5 text-[9px] font-sans font-bold text-teal-600 dark:text-teal-400">
+                            ✓ {spec.isMatch ? (language === 'vi' ? 'Khớp tiêu chuẩn' : 'Matches') : (language === 'vi' ? 'Tương đương' : 'Equivalent')}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+                      <td className="py-3 px-4 font-sans font-bold text-slate-700 dark:text-slate-300">
+                        {language === 'vi' ? '3. Thông số kỹ thuật chi tiết' : '3. Key Specifications'}
+                      </td>
+                      <td className="py-3 px-4 text-slate-700 dark:text-slate-300 bg-slate-50/40 dark:bg-slate-800/40 text-[11px]">
+                        {detailModalItem.originalKeySpecs || (language === 'vi' ? 'Thông số theo datasheet gốc' : 'Original datasheet specs')}
+                      </td>
+                      <td className="py-3 px-4 font-bold text-indigo-700 dark:text-indigo-300 bg-blue-50/20 dark:bg-blue-950/10 text-[11px]">
+                        <div>{detailModalItem.replacementKeySpecs || (language === 'vi' ? 'Tương đương thông số gốc' : 'Equivalent to original specs')}</div>
+                        <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-sans font-normal mt-1">
+                          {detailModalItem.replacementSpecsComparison}
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 font-bold text-cyan-700 dark:text-cyan-300 bg-cyan-50/20 dark:bg-cyan-950/10 text-[11px]">
+                        <div>{detailModalItem.alt2KeySpecs || (language === 'vi' ? 'Tương đương thông số gốc' : 'Equivalent to original specs')}</div>
+                        <div className="text-[10px] text-teal-600 dark:text-teal-400 font-sans font-normal mt-1">
+                          {detailModalItem.alt2SpecsComparison}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
 
                   {/* Compatibility Score */}
                   <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
                     <td className="py-3 px-4 font-sans font-bold text-slate-700 dark:text-slate-300">
-                      4. Độ tương thích & Loại
+                      {language === 'vi' ? '4. Độ khớp & Loại thay thế' : '4. Compatibility & Type'}
                     </td>
                     <td className="py-3 px-4 text-slate-500 bg-slate-50/40 dark:bg-slate-800/40">
-                      Gốc (100%)
+                      {language === 'vi' ? 'Gốc (100%)' : 'Original (100%)'}
                     </td>
                     <td className="py-3 px-4 font-bold text-emerald-600 dark:text-emerald-400 bg-blue-50/20 dark:bg-blue-950/10">
                       {detailModalItem.compatibilityScore}% ({detailModalItem.replacementType})
@@ -1096,10 +1219,10 @@ export const BomBatchMode: React.FC<BomBatchModeProps> = ({ language, onInspectP
                   {/* Pricing Overview */}
                   <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
                     <td className="py-3 px-4 font-sans font-bold text-slate-700 dark:text-slate-300">
-                      5. Báo giá tham khảo
+                      {language === 'vi' ? '5. Báo giá tham khảo' : '5. Price Reference'}
                     </td>
                     <td className="py-3 px-4 text-slate-500 bg-slate-50/40 dark:bg-slate-800/40">
-                      Theo thị trường
+                      {language === 'vi' ? 'Theo thị trường' : 'Market rate'}
                     </td>
                     <td className="py-3 px-4 text-[11px] bg-blue-50/20 dark:bg-blue-950/10">
                       <div>DigiKey: <strong className="text-slate-800 dark:text-slate-200">{detailModalItem.digikeyPrice || 'N/A'}</strong></div>
@@ -1123,14 +1246,16 @@ export const BomBatchMode: React.FC<BomBatchModeProps> = ({ language, onInspectP
                 }}
                 className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-600/20 transition-all cursor-pointer"
               >
-                Tra cứu sâu linh kiện này trên trang tìm kiếm đơn →
+                {language === 'vi'
+                  ? 'Tra cứu chi tiết linh kiện này trên trang tìm kiếm đơn →'
+                  : 'Deep inspect this part on single search →'}
               </button>
 
               <button
                 onClick={() => setDetailModalItem(null)}
                 className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs transition-colors cursor-pointer"
               >
-                Đóng
+                {language === 'vi' ? 'Đóng' : 'Close'}
               </button>
             </div>
           </div>

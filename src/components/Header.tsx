@@ -53,7 +53,7 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               <Cpu className="w-3.5 h-3.5" />
-              <span>{language === 'vi' ? 'Tra Cứu Part' : 'Part Lookup'}</span>
+              <span>{language === 'vi' ? 'Tra Cứu Linh Kiện' : 'Part Lookup'}</span>
             </button>
 
             <button
@@ -65,7 +65,7 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
-              <span>{language === 'vi' ? 'Batch BOM' : 'Batch BOM'}</span>
+              <span>{language === 'vi' ? 'Xử Lý BOM' : 'Batch BOM'}</span>
             </button>
 
             <button
@@ -104,7 +104,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={() => setLanguage(language === 'vi' ? 'en' : 'vi')}
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
-              title="Đổi ngôn ngữ / Change language"
+              title={language === 'vi' ? 'Chuyển sang Tiếng Anh' : 'Switch to Vietnamese'}
             >
               <Globe className="w-3.5 h-3.5 text-slate-400" />
               <span>{language === 'vi' ? '🇻🇳 VI' : '🇬🇧 EN'}</span>

@@ -19,6 +19,7 @@ import {
   DollarSign,
   TrendingDown,
   ShoppingBag,
+  PackageCheck,
 } from 'lucide-react';
 
 interface CandidateCardProps {
@@ -79,8 +80,13 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
                 <span className={`w-2 h-2 rounded-full ${typeConfig.dotColor}`}></span>
                 {typeConfig.title}
               </span>
-              <span className={`px-2 py-0.5 rounded text-[11px] font-medium ${lifecycle.badgeClass}`}>
+              <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold ${lifecycle.badgeClass}`}>
+                <CheckCircle2 className="w-3 h-3" />
                 {lifecycle.label}
+              </span>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-300 border border-teal-200 dark:border-teal-800">
+                <PackageCheck className="w-3 h-3 text-teal-600 dark:text-teal-400" />
+                {candidate.stockStatus || (language === 'vi' ? 'Sẵn hàng (In-Stock)' : 'In-Stock')}
               </span>
               {candidate.mountingType && (
                 <span className="text-xs text-slate-500 font-mono">
@@ -96,7 +102,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
               <button
                 onClick={handleCopy}
                 className="p-1 rounded-md text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                title="Sao chép MPN"
+                title={language === 'vi' ? 'Sao chép MPN' : 'Copy MPN'}
               >
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
               </button>
@@ -128,7 +134,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
                     ? 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800'
                     : 'text-slate-400 border-slate-200 dark:border-slate-800 hover:text-slate-700 dark:hover:text-slate-200'
                 }`}
-                title={isBookmarked ? 'Bỏ lưu' : 'Lưu linh kiện này'}
+                title={isBookmarked ? (language === 'vi' ? 'Bỏ lưu' : 'Remove bookmark') : (language === 'vi' ? 'Lưu linh kiện này' : 'Bookmark this part')}
               >
                 <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />
               </button>
@@ -267,9 +273,9 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
                       <span className="font-medium text-slate-600 dark:text-slate-400">
                         {language === 'vi' ? rule.ruleDescriptionVi : rule.ruleDescriptionEn}
                       </span>
-                      {rule.notesVi && (
+                      {(rule.notesVi || rule.notesEn) && (
                         <span className="block text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">
-                          {rule.notesVi}
+                          {language === 'vi' ? (rule.notesVi || rule.notesEn) : (rule.notesEn || rule.notesVi)}
                         </span>
                       )}
                     </div>
@@ -353,10 +359,13 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
                 {/* Visual guarantee bar */}
                 <div className="bg-slate-50 dark:bg-slate-800/60 px-3 py-1.5 border-b border-slate-200 dark:border-slate-700/60 flex items-center justify-between text-[11px]">
                   <span className="text-slate-600 dark:text-slate-400 font-sans">
-                    Đối chiếu chi tiết giữa <strong className="font-mono text-slate-800 dark:text-slate-200">{originalPartNumber}</strong> và <strong className="font-mono text-blue-600 dark:text-blue-400">{candidate.partNumber}</strong>
+                    {language === 'vi' ? 'Đối chiếu chi tiết giữa ' : 'Detailed comparison between '}
+                    <strong className="font-mono text-slate-800 dark:text-slate-200">{originalPartNumber}</strong>
+                    {language === 'vi' ? ' và ' : ' and '}
+                    <strong className="font-mono text-blue-600 dark:text-blue-400">{candidate.partNumber}</strong>
                   </span>
                   <span className="px-1.5 py-0.2 rounded bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold text-[10px]">
-                    ✓ Khác hãng sản xuất
+                    ✓ {language === 'vi' ? 'Khác hãng sản xuất' : 'Cross-Manufacturer'}
                   </span>
                 </div>
 
@@ -364,8 +373,8 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
                   <thead className="bg-slate-100 dark:bg-slate-800/90 text-[11px] font-semibold text-slate-600 dark:text-slate-400 uppercase">
                     <tr>
                       <th className="py-2 px-3">{language === 'vi' ? 'Thông Số' : 'Spec'}</th>
-                      <th className="py-2 px-3">{originalPartNumber} (Gốc)</th>
-                      <th className="py-2 px-3 text-blue-600 dark:text-blue-400 font-bold">{candidate.partNumber} (Thay thế)</th>
+                      <th className="py-2 px-3">{originalPartNumber} ({language === 'vi' ? 'Gốc' : 'Original'})</th>
+                      <th className="py-2 px-3 text-blue-600 dark:text-blue-400 font-bold">{candidate.partNumber} ({language === 'vi' ? 'Thay thế' : 'Replacement'})</th>
                       <th className="py-2 px-3 text-right">{language === 'vi' ? 'Đánh Giá' : 'Status'}</th>
                     </tr>
                   </thead>
@@ -387,11 +396,11 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
                             {spec.isMatch ? (
                               <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                                 <Check className="w-3 h-3 stroke-[3]" />
-                                <span>{isVoltage ? 'Đạt (≥ Gốc)' : isTol ? 'Đạt (≤ Gốc)' : 'Khớp đúng'}</span>
+                                <span>{isVoltage ? (language === 'vi' ? 'Đạt (≥ Gốc)' : 'Pass (≥ Orig)') : isTol ? (language === 'vi' ? 'Đạt (≤ Gốc)' : 'Pass (≤ Orig)') : (language === 'vi' ? 'Khớp đúng' : 'Exact Match')}</span>
                               </span>
                             ) : (
                               <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-                                <span>Δ Tương đương</span>
+                                <span>{language === 'vi' ? 'Δ Tương đương' : 'Δ Equivalent'}</span>
                               </span>
                             )}
                           </td>
@@ -405,7 +414,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
           </div>
         )}
 
-        {/* Distributor Buy / Availability Action Bar (DigiKey, Mouser, LCSC) */}
+        {/* Distributor Buy / Availability Action Bar (DigiKey, Mouser) */}
         <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
             {/* DigiKey Button */}

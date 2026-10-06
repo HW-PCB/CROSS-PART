@@ -262,18 +262,26 @@ export default function App() {
                   <div className="border-t border-slate-200 dark:border-slate-800 pt-6">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                       <div>
-                        <h3 className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                          <Cpu className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                          <span>
-                            {language === 'vi'
-                              ? `Linh Kiện Thay Thế Tương Đương (${filteredCandidates.length}/${result.candidates.length})`
-                              : `Replacement Candidates (${filteredCandidates.length}/${result.candidates.length})`}
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                            <Cpu className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                            <span>
+                              {language === 'vi'
+                                ? `Linh Kiện Thay Thế Tương Đương (${filteredCandidates.length}/${result.candidates.length})`
+                                : `Replacement Candidates (${filteredCandidates.length}/${result.candidates.length})`}
+                            </span>
+                          </h3>
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 text-[10px] font-bold">
+                            ✓ Active
                           </span>
-                        </h3>
-                        <p className="text-xs text-slate-500 mt-0.5">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-300 border border-teal-300 dark:border-teal-800 text-[10px] font-bold">
+                            📦 In-Stock
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-500 mt-1">
                           {language === 'vi'
-                            ? 'Xếp hạng theo độ tương thích chân cắm, thông số điện và mức độ sẵn hàng trên DigiKey/Mouser.'
-                            : 'Ranked by pinout compatibility, electrical ratings, and distributor availability.'}
+                            ? 'Ưu tiên hàng đầu: Trạng thái sản xuất Active (đang lưu hành) và Sẵn hàng kho DigiKey / Mouser.'
+                            : 'Strict priority: Active production status and verified In-Stock inventory on DigiKey & Mouser.'}
                         </p>
                       </div>
 
@@ -281,8 +289,8 @@ export default function App() {
                       <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-semibold">
                         {[
                           { id: 'ALL', labelVi: 'Tất cả', labelEn: 'All' },
-                          { id: 'DROP_IN', labelVi: 'Drop-in 100%', labelEn: '100% Drop-In' },
-                          { id: 'PIN_COMPATIBLE', labelVi: 'Pin-Compatible', labelEn: 'Pin-Compatible' },
+                          { id: 'DROP_IN', labelVi: 'Thay thế 100%', labelEn: '100% Drop-In' },
+                          { id: 'PIN_COMPATIBLE', labelVi: 'Tương thích chân', labelEn: 'Pin-Compatible' },
                           { id: 'UPGRADED', labelVi: 'Nâng cấp', labelEn: 'Upgraded' },
                         ].map((btn) => (
                           <button
@@ -370,7 +378,7 @@ export default function App() {
                         <Zap className="w-5 h-5" />
                       </div>
                       <h4 className="font-bold text-base text-slate-900 dark:text-white mb-1">
-                        {language === 'vi' ? 'Drop-in 100% Pinout' : '100% Drop-In Pinouts'}
+                        {language === 'vi' ? 'Khớp Đúng Chân Cắm 100%' : '100% Drop-In Pinouts'}
                       </h4>
                       <p className="text-xs text-slate-500 leading-relaxed">
                         {language === 'vi'
@@ -456,7 +464,9 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <div>
             <p className="font-semibold text-slate-700 dark:text-slate-300">
-              CrossPart AI — Công cụ tra cứu linh kiện điện tử tương đương DigiKey & Mouser
+              {language === 'vi'
+                ? 'CrossPart AI — Công cụ tra cứu linh kiện điện tử tương đương DigiKey & Mouser'
+                : 'CrossPart AI — Electronic Component Cross-Reference Engine (DigiKey & Mouser)'}
             </p>
             <p className="text-slate-400 mt-0.5">
               {language === 'vi'
@@ -466,9 +476,9 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-4 text-slate-400 font-medium">
-            <span>DigiKey API Ready</span>
+            <span>DigiKey</span>
             <span>·</span>
-            <span>Mouser API Ready</span>
+            <span>Mouser</span>
             <span>·</span>
             <span>Datasheets & Pinouts</span>
           </div>
